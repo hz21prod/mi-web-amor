@@ -1,13 +1,22 @@
 <div class="hero">
-  <h1 class="hero-title">Título principal</h1>
+  <h1 class="hero-title">Mi Web Amor</h1>
   <p class="hero-subtitle">Subtítulo</p>
+  <div class="days-counter">
+    <span class="days-number">{{ daysTogether() }}</span>
+    <span class="days-label">días juntos ❤️</span>
+  </div>
   <div class="scroll-hint">↓</div>
 </div>
 
-<section class="story-section" *ngFor="let section of sections">
-  <div class="story-content">
-    <span class="story-icon"><fa-icon [icon]="section.icon"></fa-icon></span>
-    <h2 class="story-heading">{{ section.heading }}</h2>
-    <p class="story-text">{{ section.text }}</p>
-  </div>
-</section>
+@for (section of sections; track $index) {
+  <section class="story-section">
+    <div class="story-content">
+      <span class="story-icon"><fa-icon [icon]="section.icon"></fa-icon></span>
+      <h2 class="story-heading">{{ section.heading }}</h2>
+      <p class="story-text">{{ section.text }}</p>
+      @if ($index === 0) {
+        <button class="btn-pastel" (click)="showSurprise()">Presiona para un regalo 🎁</button>
+      }
+    </div>
+  </section>
+}

@@ -1,9 +1,9 @@
-import { Component, inject, AfterViewInit } from '@angular/core';
-import { NgFor } from '@angular/common';
+import { Component, inject, AfterViewInit, signal } from '@angular/core';
 import { FaIconComponent, FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faHeart, faEnvelope, faStar, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import confetti from 'canvas-confetti';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -15,12 +15,15 @@ interface StorySection {
 
 @Component({
   selector: 'app-root',
-  imports: [FontAwesomeModule, FaIconComponent, NgFor],
+  imports: [FontAwesomeModule, FaIconComponent],
+  standalone: true,
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App implements AfterViewInit {
+export class AppComponent implements AfterViewInit {
   private readonly faIconLibrary: FaIconLibrary = inject(FaIconLibrary);
+
+  daysTogether = signal<number>(0);
 
   sections: StorySection[] = [
     { icon: faHeart,    heading: 'Capítulo 1', text: 'Texto del capítulo 1...' },
@@ -30,6 +33,24 @@ export class App implements AfterViewInit {
 
   constructor() {
     this.faIconLibrary.addIcons(faHeart, faEnvelope, faStar);
+    this.calculateDaysTogether();
+  }
+
+  private calculateDaysTogether() {
+    const startDate = new Date('2026-02-08');
+    const today = new Date()
+    const diffTime = Math.abs(today.getTime() - startDate.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    this.daysTogether.set(diffDays);
+  }
+
+  showSurprise() {
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 },
+      colors: ['#ffb7b2', '#ffdac1', '#e2f0cb']
+    });
   }
 
   ngAfterViewInit() {
