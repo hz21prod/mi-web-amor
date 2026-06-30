@@ -1,22 +1,137 @@
-<div class="hero">
-  <h1 class="hero-title">Mi Web Amor</h1>
-  <p class="hero-subtitle">Subtítulo</p>
-  <div class="days-counter">
-    <span class="days-number">{{ daysTogether() }}</span>
-    <span class="days-label">días juntos ❤️</span>
-  </div>
-  <div class="scroll-hint">↓</div>
+<!-- Hero & Secret Code -->
+<div class="hero" [class.night-mode]="isNight()">
+  @if (!isUnlocked()) {
+    <div class="secret-code-container">
+      <p class="secret-prompt">🔐 Ingresa el código secreto para acceder</p>
+      <input
+        type="password"
+        class="secret-input"
+        (keyup)="checkSecretCode($event)"
+        [value]="secretCode()"
+        placeholder="?"
+      >
+    </div>
+  } @else {
+    <h1 class="hero-title">Mi Web Amor 💕</h1>
+    <p class="hero-subtitle">Una web para los momentos que importan</p>
+    <div class="days-counter">
+      <span class="days-number">{{ daysTogether() }}</span>
+      <span class="days-label">días juntos ❤️</span>
+    </div>
+    <div class="scroll-hint">↓</div>
+  }
 </div>
 
-@for (section of sections; track $index) {
-  <section class="story-section">
+@if (isUnlocked()) {
+  <!-- Timeline Section -->
+  <section class="story-section timeline-section">
     <div class="story-content">
-      <span class="story-icon"><fa-icon [icon]="section.icon"></fa-icon></span>
-      <h2 class="story-heading">{{ section.heading }}</h2>
-      <p class="story-text">{{ section.text }}</p>
-      @if ($index === 0) {
-        <button class="btn-pastel" (click)="showSurprise()">Presiona para un regalo 🎁</button>
+      <h2 class="section-title">📖 Nuestra Historia</h2>
+      <div class="timeline">
+        @for (event of timelineEvents; track $index) {
+          <div class="timeline-item" [class.revealed]="event.revealed">
+            <button
+              class="timeline-event"
+              (click)="revealMemory(event)"
+              [disabled]="event.revealed"
+            >
+              @if (!event.revealed) {
+                <fa-icon [icon]="faLock"></fa-icon>
+              } @else {
+                <fa-icon [icon]="faUnlock"></fa-icon>
+              }
+              {{ event.title }}
+            </button>
+            @if (event.revealed) {
+              <p class="memory-text">{{ event.description }}</p>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Random Messages Section -->
+  <section class="story-section message-section">
+    <div class="story-content">
+      <h2 class="section-title">💌 Mensajes de Amor</h2>
+      <button class="btn-pastel" (click)="showRandomMessage()">Revelar mensaje 💝</button>
+      @if (currentMessage()) {
+        <div class="message-box">
+          {{ currentMessage() }}
+        </div>
       }
     </div>
   </section>
+
+  <!-- Love Letter Section -->
+  <section class="story-section letter-section">
+    <div class="story-content">
+      <h2 class="section-title">💌 Carta de Amor</h2>
+      <div class="envelope-container" (mouseenter)="toggleEnvelope()" (mouseleave)="toggleEnvelope()">
+        <div class="envelope" [class.open]="isEnvelopeOpen()">
+          <div class="envelope-front">
+            <p class="envelope-text">Para ti 💕</p>
+          </div>
+          <div class="envelope-content">
+            <pre class="love-letter">{{ loveLetterText }}</pre>
+          </div>
+        </div>
+      </div>
+      <p class="envelope-hint">Pasa el mouse sobre el sobre 💌</p>
+    </div>
+  </section>
+
+  <!-- Quiz Section -->
+  <section class="story-section quiz-section">
+    <div class="story-content">
+      <h2 class="section-title">🎮 El Juego de las Respuestas</h2>
+      <p class="quiz-subtitle">¿Qué tanto me conoces?</p>
+      @for (question of quizQuestions; track $index) {
+        <div class="quiz-question">
+          <p class="question-text">{{ question.emoji }} {{ question.question }}</p>
+          <div class="quiz-options">
+            <button class="btn-quiz" (click)="answerQuiz(question, 'yo')">Yo</button>
+            <button class="btn-quiz" (click)="answerQuiz(question, 'ella')">Ella</button>
+          </div>
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- Bucket List Section -->
+  <section class="story-section bucket-section">
+    <div class="story-content">
+      <h2 class="section-title">✨ Nuestros Sueños Juntos</h2>
+      <p class="bucket-subtitle">Cosas que queremos hacer juntos</p>
+      <div class="bucket-list">
+        @for (item of bucketListItems(); track $index) {
+          <div class="bucket-item">
+            <input
+              type="checkbox"
+              [checked]="item.completed"
+              (change)="toggleBucketItem(item)"
+              class="bucket-checkbox"
+            >
+            <span class="bucket-text" [class.completed]="item.completed">{{ item.text }}</span>
+          </div>
+        }
+      </div>
+      <p class="bucket-progress">Completadas: {{ bucketListItems().filter(i => i.completed).length }} / {{ bucketListItems().length }}</p>
+    </div>
+  </section>
+
+  <!-- Original Story Sections -->
+  @for (section of sections; track $index) {
+    <section class="story-section">
+      <div class="story-content">
+        <span class="story-icon"><fa-icon [icon]="section.icon"></fa-icon></span>
+        <h2 class="story-heading">{{ section.heading }}</h2>
+        <p class="story-text">{{ section.text }}</p>
+        @if ($index === 0) {
+          <button class="btn-pastel" (click)="showSurprise()">Presiona para un regalo 🎁</button>
+        }
+      </div>
+    </section>
+  }
 }
