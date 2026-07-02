@@ -1,5 +1,6 @@
 import { Component, inject, AfterViewInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { FaIconComponent, FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faHeart, faEnvelope, faStar, IconDefinition, faLock, faUnlock } from '@fortawesome/free-solid-svg-icons';
 import gsap from 'gsap';
@@ -14,10 +15,18 @@ interface StorySection {
   text: string;
 }
 
+type TimelineBlock =
+  | { type: 'text'; content: string }
+  | { type: 'heading'; content: string }
+  | { type: 'image'; src: string; caption?: string }
+  | { type: 'gallery'; images: string[] }
+  | { type: 'rich'; content: string };
+
 interface TimelineEvent {
   title: string;
-  description: string;
   revealed: boolean;
+  date?: string;
+  blocks: TimelineBlock[];
 }
 
 interface QuizQuestion {
@@ -32,13 +41,13 @@ interface BucketListItem {
 }
 
 @Component({
-  selector: 'app-root',
-  imports: [FontAwesomeModule, FaIconComponent, CommonModule],
+  selector: 'app-home',
+  imports: [FontAwesomeModule, FaIconComponent, CommonModule, RouterLink],
   standalone: true,
-  templateUrl: './app.html',
-  styleUrl: './app.css'
+  templateUrl: './home.html',
+  styleUrl: './home.css'
 })
-export class AppComponent implements AfterViewInit {
+export class HomeComponent implements AfterViewInit {
   private readonly faIconLibrary: FaIconLibrary = inject(FaIconLibrary);
 
   daysTogether = signal<number>(0);
@@ -59,10 +68,76 @@ export class AppComponent implements AfterViewInit {
   ];
 
   timelineEvents: TimelineEvent[] = [
-    { title: '💕 Primera cita', description: 'El día que nos conocimos...', revealed: false },
-    { title: '🌍 Primer viaje', description: 'Nuestro primer viaje juntos...', revealed: false },
-    { title: '🏠 Nuevo inicio', description: 'Un nuevo capítulo juntos...', revealed: false },
-    { title: '✨ Momento especial', description: 'Aquel día que cambió todo...', revealed: false },
+    {
+      title: '💕 08/02/2026',
+      revealed: false,
+      blocks: [
+        { type: 'heading', content: 'Cuando todo comenzó' },
+        { type: 'text', content: 'Estaba nervioso, no porque fueras a decirme que no, si no porque, cuando algo te importa, te sientes así innevitablemente.' },
+        { type: 'text', content: 'Quería que fuera un lugar especial y tener un regalo para acordarnos de ese día. Por eso escogí un Lego, algo sencillo y para hacer juntos. Creo que no pude escoger mejor.' },
+        { type: 'image', src: 'assets/flores-salir.jpeg', caption: 'El primer Lego de muchos' },
+        { type: 'text', content: 'Así comenzó nuestra historia, desde la playa de San Lorenzo hasta todo el mundo.' }
+      ]
+    },
+    {
+      title: 'San Valentín',
+      date: '14/02/2026',
+      revealed: false,
+      blocks: [
+        { type: 'heading', content: 'El primero de muchos' },
+        { type: 'text', content: 'Una semana después estábamos celebrando San Valentín, el primero para mí junto a alguien.' },
+        { type: 'text', content: 'Fue perfecto, el fin de semana que pasamos juntos, los regalos, pero, sobre todo, tu compañía. Me haces sentir especial Jess, y siento que contigo estoy en mi lugar ideal.' },
+        { type: 'image', src: 'assets/san-valentin.jpeg' }
+      ]
+    },
+    {
+      title: '🌍 El primer viaje',
+      date: '02/04/2026',
+      revealed: false,
+      blocks: [
+        { type: 'heading', content: 'De viaje a Cantabria' },
+        { type: 'text', content: '¡Y dos meses después ya estábamos viajando! El señor con la cámara, el hotel con el jacucci, El Capricho de Gaudí...' },
+        { type: 'text', content: 'Fue un viaje pequeño, íntimo, sin prisas, y me encantó. Quiero seguir haciendo viajes contigo, recorrer el mundo con la persona a la que se lo daría.' },
+        { type: 'gallery', images: [
+          'assets/san-vicente.jpeg',
+          'assets/comillas.jpeg',
+          'assets/paisano-santillana.jpeg'
+        ] }
+      ]
+    },
+    {
+      title: '✨ El día que te dije todo',
+      date: '10/06/2026',
+      revealed: false,
+      blocks: [
+        { type: 'heading', content: 'Cuando las palabras no alcanzaban' },
+        { type: 'text', content: 'Había un momento que llevaría guardado en mi pecho durante un tiempo. Necesitaba que supieras exactamente lo que significas para mí.' },
+        { type: 'text', content: 'Te llevé a nuestro lugar especial, bajo las estrellas, y dejé que mi corazón hablara por mí. Te conté cómo cambió todo desde el momento en que te conocí.' },
+        { type: 'gallery', images: [
+          'assets/sushi.jpeg',
+          'assets/san-juan.jpeg',
+          'assets/fiestas-brana-cara.jpeg'
+        ] },
+        { type: 'text', content: 'Viste las lágrimas en mis ojos porque no son de tristeza, sino de la abrumadora felicidad de tenerte. De saber que compartimos algo verdadero y profundo.' },
+        { type: 'text', content: 'Cuando dijiste que sentías lo mismo, el mundo se detuvo. Era el momento más puro, más honesto, más NUESTRO que jamás haya vivido. 💘' }
+      ]
+    },
+    {
+      title: '🎉 Celebrando cada día',
+      revealed: false,
+      blocks: [
+        { type: 'heading', content: 'Pequeños detalles, grandes significados' },
+        { type: 'text', content: 'No necesitamos fechas especiales para celebrarte. Cada día contigo es un regalo que no doy por sentado.' },
+        { type: 'gallery', images: [
+          'assets/sushi.jpeg',
+          'assets/san-juan.jpeg',
+          'assets/fiestas-brana-cara.jpeg'
+        ] },
+        { type: 'text', content: 'Desayunar contigo, escuchar tus historias, bromear sin parar, caminar sin destino... Todo es especial cuando estás tú.' },
+        { type: 'text', content: 'La vida no son solo los grandes momentos. Son estos, los pequeños, los que compartimos en la intimidad de nuestro amor.' },
+        { type: 'text', content: 'Eres mi favorito. Siempre serás mi favorito. 🌹' }
+      ]
+    }
   ];
 
   randomMessages: string[] = [
@@ -124,7 +199,7 @@ export class AppComponent implements AfterViewInit {
   }
 
   checkSecretCode(event: KeyboardEvent) {
-    if ((event.target as HTMLInputElement).value === '2208') {
+    if ((event.target as HTMLInputElement).value === '23') {
       this.isUnlocked.set(true);
       setTimeout(() => {
         (event.target as HTMLInputElement).value = '';

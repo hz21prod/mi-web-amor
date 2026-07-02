@@ -1,0 +1,512 @@
+:host {
+  display: block;
+  font-family: 'Quicksand', sans-serif;
+}
+
+.neverland {
+  position: relative;
+  --np-night-1: #0b132b;
+  --np-night-2: #1c2541;
+  --np-forest-1: #10331f;
+  --np-forest-2: #1b4332;
+  --np-gold: #ffd76e;
+  --np-gold-strong: #d4af37;
+  --np-mint: #7ee8c1;
+  --np-text: #f4f1e8;
+}
+
+/* One continuous atmosphere behind the entire page — no per-section color blocks */
+.np-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 50% 0%, var(--np-night-2) 0%, var(--np-night-1) 55%, var(--np-forest-1) 130%);
+}
+
+.np-stars {
+  position: absolute;
+  inset: 0;
+}
+
+.np-star {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 0 6px 1px rgba(255, 255, 255, 0.8);
+  animation-name: np-twinkle;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes np-twinkle {
+  0%, 100% { opacity: 0.2; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+.np-dust {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.np-dust-particle {
+  position: absolute;
+  bottom: -10px;
+  width: 5px;
+  height: 5px;
+  background: radial-gradient(circle, var(--np-mint) 0%, transparent 70%);
+  border-radius: 50%;
+  animation-name: np-float-up;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+@keyframes np-float-up {
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: 0;
+  }
+  10% { opacity: 1; }
+  90% { opacity: 0.8; }
+  100% {
+    transform: translateY(-100vh) translateX(20px);
+    opacity: 0;
+  }
+}
+
+.np-hero-skyline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 40vh;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.np-hero-skyline svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Hero */
+.np-hero {
+  position: relative;
+  z-index: 1;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.np-hero-photo {
+  position: absolute;
+  right: 4%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: min(38vw, 380px);
+  filter: invert(80%) sepia(46%) saturate(500%) hue-rotate(-2deg) brightness(103%) contrast(101%)
+    drop-shadow(0 0 30px rgba(255, 215, 110, 0.45));
+  animation: np-hero-photo-float 6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes np-hero-photo-float {
+  0%, 100% { transform: translateY(-50%) rotate(-2deg); }
+  50% { transform: translateY(calc(-50% - 18px)) rotate(2deg); }
+}
+
+.np-hero-content {
+  position: relative;
+  z-index: 2;
+  padding: 2rem;
+  color: var(--np-text);
+}
+
+/* Custom inline SVG icons */
+.np-svg-icon {
+  display: inline-block;
+  line-height: 0;
+}
+
+.np-svg-icon svg {
+  width: 1em;
+  height: 1em;
+  display: block;
+}
+
+.np-hat-icon {
+  font-size: 3rem;
+  width: 3rem;
+  height: 3rem;
+  color: var(--np-gold);
+  margin-bottom: 1rem;
+  filter: drop-shadow(0 0 12px rgba(255, 215, 110, 0.6));
+  animation: np-bob 3s ease-in-out infinite;
+}
+
+@keyframes np-bob {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50% { transform: translateY(-10px) rotate(3deg); }
+}
+
+.np-title {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 4rem;
+  font-weight: 700;
+  color: var(--np-gold);
+  text-shadow: 0 0 20px rgba(255, 215, 110, 0.5), 0 4px 12px rgba(0, 0, 0, 0.5);
+  letter-spacing: 2px;
+  margin-bottom: 1.5rem;
+}
+
+.np-quote {
+  font-family: 'Caveat', cursive;
+  font-size: 1.8rem;
+  color: var(--np-mint);
+  font-weight: 600;
+}
+
+.np-scroll-hint {
+  margin-top: 2.5rem;
+  font-size: 1.8rem;
+  color: var(--np-gold);
+  animation: np-bounce 1.5s infinite;
+}
+
+@keyframes np-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(12px); }
+}
+
+/* Continuous flow — every moment sits directly on the fixed backdrop */
+.np-flow {
+  position: relative;
+  z-index: 1;
+}
+
+.np-moment {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 7rem 2rem;
+  text-align: center;
+  color: var(--np-text);
+}
+
+.np-moment--center {
+  max-width: 640px;
+}
+
+/* Split moments: photo on one side, copy on the other — alternating like Apple product pages */
+.np-moment--split {
+  max-width: 1080px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 3rem;
+  text-align: left;
+}
+
+.np-moment--split .np-moment-copy {
+  text-align: left;
+}
+
+.np-moment--reverse .np-moment-media {
+  order: 2;
+}
+
+.np-moment--reverse .np-moment-copy {
+  order: 1;
+}
+
+.np-moment-media {
+  display: flex;
+  justify-content: center;
+}
+
+.np-icon-inline {
+  font-size: 2.5rem;
+  color: var(--np-gold);
+  margin-bottom: 1rem;
+}
+
+.np-section-title {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 2.2rem;
+  color: var(--np-gold);
+  margin-bottom: 1.5rem;
+}
+
+.np-text {
+  font-size: 1.1rem;
+  line-height: 1.9;
+  color: var(--np-text);
+  margin-bottom: 1.2rem;
+  opacity: 0.9;
+}
+
+/* Peter Pan "moon" portrait */
+.np-moon-frame {
+  position: relative;
+  width: min(320px, 70vw);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 35% 30%, var(--np-gold) 0%, var(--np-gold-strong) 55%, #a9791f 100%);
+  box-shadow: 0 0 60px rgba(255, 215, 110, 0.45), 0 0 140px rgba(255, 215, 110, 0.2);
+}
+
+.np-moon-photo {
+  width: 76%;
+  height: 76%;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+}
+
+/* Tinted photos (transparent silhouettes recolored to match the palette) */
+.np-tint-photo {
+  width: 100%;
+  max-width: 380px;
+  display: block;
+}
+
+.np-tint-mint {
+  filter: invert(76%) sepia(24%) saturate(638%) hue-rotate(94deg) brightness(101%) contrast(101%)
+    drop-shadow(0 0 24px rgba(126, 232, 193, 0.35));
+}
+
+/* Shared flat panel style used consistently for every card-like element */
+.np-panel {
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 18px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.np-panel:hover {
+  transform: translateY(-6px);
+  border-color: var(--np-gold-strong);
+  box-shadow: 0 10px 24px rgba(255, 215, 110, 0.18);
+}
+
+/* Characters grid */
+.np-characters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.np-character-card {
+  padding: 1.5rem 1rem;
+}
+
+.np-character-icon {
+  font-size: 2rem;
+  color: var(--np-mint);
+  margin-bottom: 0.75rem;
+}
+
+.np-character-name {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 1.1rem;
+  color: var(--np-gold);
+  margin-bottom: 0.5rem;
+}
+
+.np-character-desc {
+  font-size: 0.9rem;
+  color: var(--np-text);
+  opacity: 0.85;
+  line-height: 1.5;
+}
+
+/* Illustrated scenes */
+.np-scenes-intro {
+  font-size: 0.95rem;
+  opacity: 0.8;
+}
+
+.np-scenes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.np-scene-card {
+  margin: 0;
+  overflow: hidden;
+}
+
+.np-scene-art {
+  width: 100%;
+  aspect-ratio: 2 / 1;
+  line-height: 0;
+}
+
+.np-scene-art svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.np-scene-card figcaption {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.9rem 1rem 1.1rem;
+}
+
+.np-scene-title {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 1rem;
+  color: var(--np-gold);
+}
+
+.np-scene-caption {
+  font-size: 0.85rem;
+  color: var(--np-text);
+  opacity: 0.8;
+}
+
+/* Quotes */
+.np-quotes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+  text-align: left;
+}
+
+.np-quote-card {
+  margin: 0;
+  padding: 1.25rem 1.4rem;
+  border-left: 3px solid var(--np-gold-strong);
+  border-radius: 4px 18px 18px 4px;
+}
+
+.np-quote-text {
+  font-family: 'Caveat', cursive;
+  font-size: 1.3rem;
+  line-height: 1.5;
+  color: var(--np-mint);
+  margin-bottom: 0.6rem;
+}
+
+.np-quote-source {
+  font-size: 0.8rem;
+  color: var(--np-text);
+  opacity: 0.7;
+  font-style: normal;
+}
+
+/* Buttons */
+.np-lock-icon {
+  color: var(--np-mint);
+}
+
+.np-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 1rem;
+  padding: 0.9rem 2rem;
+  border-radius: 50px;
+  border: 2px solid var(--np-gold-strong);
+  background: transparent;
+  color: var(--np-gold);
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.np-btn:not(:disabled):hover {
+  background: var(--np-gold-strong);
+  color: var(--np-night-1);
+  transform: scale(1.05);
+  box-shadow: 0 6px 18px rgba(255, 215, 110, 0.35);
+}
+
+.np-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.np-btn-link {
+  border-color: var(--np-mint);
+  color: var(--np-mint);
+}
+
+.np-btn-link:hover {
+  background: var(--np-mint);
+  color: var(--np-night-1);
+  box-shadow: 0 6px 18px rgba(126, 232, 193, 0.35);
+}
+
+/* Finale */
+.np-finale {
+  position: relative;
+  z-index: 1;
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2.5rem;
+  padding: 5rem 2rem 7rem;
+  text-align: center;
+}
+
+.np-finale-photo {
+  width: min(70vw, 460px);
+  filter: invert(80%) sepia(46%) saturate(500%) hue-rotate(-2deg) brightness(103%) contrast(101%)
+    drop-shadow(0 0 40px rgba(255, 215, 110, 0.4));
+}
+
+@media (max-width: 760px) {
+  .np-moment--split {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .np-moment--split .np-moment-copy {
+    text-align: center;
+  }
+
+  .np-moment--reverse .np-moment-media {
+    order: 1;
+  }
+
+  .np-moment--reverse .np-moment-copy {
+    order: 2;
+  }
+
+  .np-hero-photo {
+    width: 46vw;
+    opacity: 0.8;
+  }
+}
+
+@media (max-width: 600px) {
+  .np-title {
+    font-size: 2.6rem;
+  }
+
+  .np-quote {
+    font-size: 1.3rem;
+  }
+
+  .np-moment {
+    padding: 5rem 1.5rem;
+  }
+}

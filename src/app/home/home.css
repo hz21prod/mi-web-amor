@@ -244,6 +244,13 @@
   cursor: default;
 }
 
+.event-date {
+  display: block;
+  font-size: 1rem;
+  margin-top: 0.25rem;
+  font-weight: 400;
+}
+
 .timeline-item.revealed .memory-text {
   margin-top: 1rem;
   padding: 1rem;
@@ -252,6 +259,81 @@
   color: var(--text-light);
   line-height: 1.8;
   font-style: italic;
+}
+
+.memory-content {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.memory-heading {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--primary-pastel);
+  margin: 0;
+  font-family: 'Comfortaa', sans-serif;
+}
+
+.memory-text {
+  padding: 0.5rem;
+  color: var(--text-light);
+  line-height: 1.8;
+  font-size: 1rem;
+}
+
+.memory-figure {
+  margin: 0;
+  padding: 0;
+}
+
+.memory-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(255, 183, 178, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.memory-image:hover {
+  transform: scale(1.02);
+}
+
+.memory-caption {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--primary-pastel);
+  text-align: center;
+  font-style: italic;
+}
+
+.memory-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.gallery-image {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(255, 183, 178, 0.2);
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.gallery-image:hover {
+  transform: scale(1.05);
+}
+
+.memory-rich {
+  padding: 1rem;
+  background: rgba(255, 183, 178, 0.1);
+  border-radius: 10px;
+  color: var(--text-light);
+  line-height: 1.8;
 }
 
 /* Messages */

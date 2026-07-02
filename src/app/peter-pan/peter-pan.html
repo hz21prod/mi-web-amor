@@ -1,0 +1,161 @@
+<div class="neverland">
+
+  <!-- Fixed backdrop: one continuous sky/forest atmosphere behind the whole page -->
+  <div class="np-backdrop">
+    <div class="np-stars">
+      @for (s of stars; track $index) {
+        <span
+          class="np-star"
+          [style.top.%]="s.top"
+          [style.left.%]="s.left"
+          [style.width.px]="s.size"
+          [style.height.px]="s.size"
+          [style.animation-delay.s]="s.delay"
+          [style.animation-duration.s]="s.duration"
+        ></span>
+      }
+    </div>
+    <div class="np-dust">
+      @for (d of dust; track $index) {
+        <span
+          class="np-dust-particle"
+          [style.left.%]="d.left"
+          [style.animation-delay.s]="d.delay"
+          [style.animation-duration.s]="d.duration"
+        ></span>
+      }
+    </div>
+    <div class="np-hero-skyline" [innerHTML]="heroSkyline"></div>
+  </div>
+
+  <!-- Hero -->
+  <section class="np-hero">
+    <img class="np-hero-photo" [src]="photos.volando" alt="Peter Pan volando" />
+    <div class="np-hero-content">
+      <span class="np-svg-icon np-hat-icon" [innerHTML]="heroHat"></span>
+      <h1 class="np-title">Nunca Jamás</h1>
+      <p class="np-quote">"Segunda estrella a la derecha, y todo recto hasta el amanecer" ⭐</p>
+      <div class="np-scroll-hint">↓</div>
+    </div>
+  </section>
+
+  <!-- Continuous flow, no separate colored sections -->
+  <main class="np-flow">
+
+    <!-- Intro statement -->
+    <section class="np-moment np-moment--center">
+      <span class="np-svg-icon np-icon-inline pp-reveal" [innerHTML]="heroHat"></span>
+      <h2 class="np-section-title pp-reveal">El País de Nunca Jamás</h2>
+      <p class="np-text pp-reveal">
+        Un lugar mágico donde las sirenas cantan, los piratas navegan y una pizca de polvo de hadas
+        te hace volar. Aquí el tiempo se detiene, la imaginación manda, y nadie tiene que crecer
+        si no quiere hacerlo.
+      </p>
+      <p class="np-text pp-reveal">
+        Todo lo que necesitas es fe, confianza... y un poquito de polvo mágico. ✨
+      </p>
+    </section>
+
+    <!-- Peter Pan portrait moment -->
+    <section class="np-moment np-moment--split">
+      <div class="np-moment-media pp-reveal-media">
+        <div class="np-moon-frame">
+          <img class="np-moon-photo" [src]="photos.silueta" alt="Silueta de Peter Pan" />
+        </div>
+      </div>
+      <div class="np-moment-copy pp-reveal">
+        <h2 class="np-section-title">Peter Pan</h2>
+        <p class="np-text">
+          El niño que decidió quedarse pequeño para siempre. Vive entre las copas de los árboles
+          de Nunca Jamás, toca su flauta al anochecer y nunca, jamás, deja de creer en la magia.
+        </p>
+      </div>
+    </section>
+
+    <!-- Characters -->
+    <section class="np-moment">
+      <h2 class="np-section-title pp-reveal">Habitantes de la isla</h2>
+      <div class="np-characters-grid pp-reveal-stagger">
+        @for (character of characters; track character.name) {
+          <div class="np-panel np-character-card">
+            <span class="np-svg-icon np-character-icon" [innerHTML]="character.svg"></span>
+            <h3 class="np-character-name">{{ character.name }}</h3>
+            <p class="np-character-desc">{{ character.description }}</p>
+          </div>
+        }
+      </div>
+    </section>
+
+    <!-- Wendy moment -->
+    <section class="np-moment np-moment--split np-moment--reverse">
+      <div class="np-moment-copy pp-reveal">
+        <h2 class="np-section-title">Wendy Darling</h2>
+        <p class="np-text">
+          La niña de Londres que le cosió la sombra a Peter y voló con él hasta Nunca Jamás.
+          Contaba cuentos a los Niños Perdidos y les recordaba, entre risas, lo que era tener un hogar.
+        </p>
+      </div>
+      <div class="np-moment-media pp-reveal-media">
+        <img class="np-tint-photo np-tint-mint" [src]="photos.wendy" alt="Peter Pan y Wendy" />
+      </div>
+    </section>
+
+    <!-- Illustrated scenes -->
+    <section class="np-moment">
+      <h2 class="np-section-title pp-reveal">Momentos de la historia</h2>
+      <p class="np-text np-scenes-intro pp-reveal">
+        Pequeñas ilustraciones propias inspiradas en los escenarios más recordados del cuento.
+      </p>
+      <div class="np-scenes-grid pp-reveal-stagger">
+        @for (scene of scenes; track scene.title) {
+          <figure class="np-panel np-scene-card">
+            <div class="np-scene-art" [innerHTML]="scene.svg"></div>
+            <figcaption>
+              <span class="np-scene-title">{{ scene.title }}</span>
+              <span class="np-scene-caption">{{ scene.caption }}</span>
+            </figcaption>
+          </figure>
+        }
+      </div>
+    </section>
+
+    <!-- Quotes -->
+    <section class="np-moment">
+      <span class="np-svg-icon np-icon-inline pp-reveal" [innerHTML]="starIcon"></span>
+      <h2 class="np-section-title pp-reveal">Frases para no crecer</h2>
+      <div class="np-quotes-grid pp-reveal-stagger">
+        @for (quote of quotes; track quote.text) {
+          <blockquote class="np-panel np-quote-card">
+            <p class="np-quote-text">{{ quote.text }}</p>
+            <footer class="np-quote-source">{{ quote.source }}</footer>
+          </blockquote>
+        }
+      </div>
+    </section>
+
+    <!-- Quiz teaser -->
+    <section class="np-moment np-moment--center">
+      <fa-icon class="np-icon-inline np-lock-icon pp-reveal" [icon]="faLock"></fa-icon>
+      <h2 class="np-section-title pp-reveal">Un cuestionario mágico</h2>
+      <p class="np-text pp-reveal">
+        Muy pronto podrás poner a prueba cuánto sabes de Nunca Jamás...
+        pero por ahora, la magia sigue preparándose entre bambalinas. 🧚
+      </p>
+      <button class="np-btn pp-reveal" disabled>
+        <fa-icon [icon]="faWandMagicSparkles"></fa-icon>
+        Próximamente
+      </button>
+    </section>
+
+    <!-- Finale -->
+    <section class="np-finale pp-reveal-media">
+      <img class="np-finale-photo" [src]="photos.neverGrowUp" alt="Never grow up" />
+      <a class="np-btn np-btn-link" routerLink="/">
+        <span class="np-svg-icon np-btn-icon" [innerHTML]="starIcon"></span>
+        Volver a nuestra historia
+      </a>
+    </section>
+
+  </main>
+
+</div>
