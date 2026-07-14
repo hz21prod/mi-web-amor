@@ -1,19 +1,13 @@
-import { Component, inject, AfterViewInit, signal } from '@angular/core';
+import { Component, inject, AfterViewInit, HostListener, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FaIconComponent, FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faHeart, faEnvelope, faStar, IconDefinition, faLock, faUnlock } from '@fortawesome/free-solid-svg-icons';
+import { faLock, faUnlock } from '@fortawesome/free-solid-svg-icons';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import confetti from 'canvas-confetti';
 
 gsap.registerPlugin(ScrollTrigger);
-
-interface StorySection {
-  icon: IconDefinition;
-  heading: string;
-  text: string;
-}
 
 type TimelineBlock =
   | { type: 'text'; content: string }
@@ -40,6 +34,13 @@ interface BucketListItem {
   completed: boolean;
 }
 
+interface FloatingIcon {
+  id: number;
+  x: number;
+  y: number;
+  icon: string;
+}
+
 @Component({
   selector: 'app-home',
   imports: [FontAwesomeModule, FaIconComponent, CommonModule, RouterLink],
@@ -54,18 +55,21 @@ export class HomeComponent implements AfterViewInit {
   isNight = signal<boolean>(false);
   isUnlocked = signal<boolean>(false);
   secretCode = signal<string>('');
-  currentMessage = signal<string>('');
-  isEnvelopeOpen = signal<boolean>(false);
   bucketListItems = signal<BucketListItem[]>([]);
+  newBucketItemText = signal<string>('');
+  floatingIcons = signal<FloatingIcon[]>([]);
 
   faLock = faLock;
   faUnlock = faUnlock;
 
-  sections: StorySection[] = [
-    { icon: faHeart,    heading: 'Capítulo 1', text: 'Texto del capítulo 1...' },
-    { icon: faStar,     heading: 'Capítulo 2', text: 'Texto del capítulo 2...' },
-    { icon: faEnvelope, heading: 'Capítulo 3', text: 'Texto del capítulo 3...' },
-  ];
+  private floatingIconId = 0;
+  private readonly clickIcons = ['✨', '💕', '❤️'];
+
+  dedicationText = `Para ti, que llegaste sin avisar y te quedaste sin pedir permiso.
+Esta página guarda un poco de todo lo que hemos vivido: los nervios del primer día,
+los viajes pequeños, las risas tontas y las palabras que por fin nos atrevimos a decir.
+No es un regalo grande, pero es sincero, como todo lo que siento por ti.
+Gracias por elegirme cada día. Te amo, hoy y siempre. 💕`;
 
   timelineEvents: TimelineEvent[] = [
     {
@@ -140,49 +144,28 @@ export class HomeComponent implements AfterViewInit {
     }
   ];
 
-  randomMessages: string[] = [
-    '💕 Te amo más cada día que pasa',
-    '✨ Eres lo mejor que me pasó',
-    '🌙 Duermo soñando contigo',
-    '☀️ Despiertas toda mi felicidad',
-    '🎵 Eres la canción de mi corazón',
-    '🌹 Mi amor por ti no tiene fin',
-    '💘 Cada momento contigo es especial',
-    '🦋 Me transformaste en mejor persona',
-    '🌟 Eres mi luz en la oscuridad',
-    '💑 Quiero envejcer contigo',
-  ];
-
   quizQuestions: QuizQuestion[] = [
     { question: '¿Quién tarda más en arreglarse?', correctAnswer: 'ella', emoji: '💄' },
     { question: '¿Quién cocina mejor?', correctAnswer: 'yo', emoji: '👨‍🍳' },
     { question: '¿Quién es más impuntual?', correctAnswer: 'ella', emoji: '⏰' },
   ];
 
-  loveLetterText = `
-    Mi amor,
-
-    Cada día contigo es un regalo que nunca esperé tener.
-    Tu sonrisa ilumina mis días más oscuros,
-    y tu presencia hace que todo sea posible.
-
-    No hay palabras suficientes para describir
-    lo que sientes en mi corazón.
-    Eres mi mejor amiga, mi confidente, mi todo.
-
-    Te prometo amarte todos los días de mi vida,
-    en las buenas y en las malas,
-    ahora y siempre.
-
-    Por siempre tuyo,
-    ❤️
-  `;
-
   constructor() {
-    this.faIconLibrary.addIcons(faHeart, faEnvelope, faStar, faLock, faUnlock);
+    this.faIconLibrary.addIcons(faLock, faUnlock);
     this.calculateDaysTogether();
     this.checkTimeOfDay();
     this.loadBucketList();
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const icon = this.clickIcons[Math.floor(Math.random() * this.clickIcons.length)];
+    const id = this.floatingIconId++;
+    this.floatingIcons.update((icons) => [...icons, { id, x: event.clientX, y: event.clientY, icon }]);
+
+    setTimeout(() => {
+      this.floatingIcons.update((icons) => icons.filter((i) => i.id !== id));
+    }, 1200);
   }
 
   private checkTimeOfDay() {
@@ -212,38 +195,6 @@ export class HomeComponent implements AfterViewInit {
     event.revealed = true;
   }
 
-  showRandomMessage() {
-    const randomIndex = Math.floor(Math.random() * this.randomMessages.length);
-    const message = this.randomMessages[randomIndex];
-    this.currentMessage.set(message);
-
-    setTimeout(() => {
-      gsap.from('.message-box', {
-        opacity: 0,
-        y: -20,
-        duration: 0.6,
-        ease: 'back.out'
-      });
-    }, 0);
-
-    setTimeout(() => {
-      this.currentMessage.set('');
-    }, 4000);
-  }
-
-  toggleEnvelope() {
-    this.isEnvelopeOpen.set(!this.isEnvelopeOpen());
-  }
-
-  showSurprise() {
-    confetti({
-      particleCount: 100,
-      spread: 70,
-      origin: { y: 0.6 },
-      colors: ['#ffb7b2', '#ffdac1', '#e2f0cb']
-    });
-  }
-
   answerQuiz(question: QuizQuestion, answer: string) {
     if (answer.toLowerCase() === question.correctAnswer.toLowerCase()) {
       confetti({
@@ -259,6 +210,15 @@ export class HomeComponent implements AfterViewInit {
 
   toggleBucketItem(item: BucketListItem) {
     item.completed = !item.completed;
+    this.saveBucketList();
+  }
+
+  addBucketItem() {
+    const text = this.newBucketItemText().trim();
+    if (!text) return;
+
+    this.bucketListItems.update((items) => [...items, { text, completed: false }]);
+    this.newBucketItemText.set('');
     this.saveBucketList();
   }
 
@@ -283,8 +243,8 @@ export class HomeComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     gsap.from('.hero-title', { opacity: 0, y: -40, duration: 1 });
-    gsap.from('.hero-subtitle', { opacity: 0, y: -20, duration: 1, delay: 0.4 });
-    gsap.from('.scroll-hint', { opacity: 0, duration: 1, delay: 0.9 });
+    gsap.from('.hero-dedication', { opacity: 0, y: -20, duration: 1, delay: 0.4 });
+    gsap.from('.hero-image', { opacity: 0, scale: 0.92, duration: 1, delay: 0.5 });
 
     gsap.utils.toArray<HTMLElement>('.story-content').forEach((el) => {
       gsap.from(el, {
