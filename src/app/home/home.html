@@ -19,7 +19,7 @@
       >
     </div>
   } @else {
-    <h1 class="hero-title">Una pequeña sorpresa 💕</h1>
+    <h1 class="hero-title">Una sorpresa por los 6 meses 💕</h1>
     <div class="hero-row">
       <p class="hero-dedication">{{ dedicationText }}</p>
       <img class="hero-image" src="assets/foto-besandonos.jpeg" alt="Nosotros">
@@ -66,6 +66,14 @@
                   @if (block.type === 'image') {
                     <figure class="memory-figure">
                       <img [src]="block.src" alt="Memory" class="memory-image">
+                      @if (block.caption) {
+                        <figcaption class="memory-caption">{{ block.caption }}</figcaption>
+                      }
+                    </figure>
+                  }
+                  @if (block.type === 'video') {
+                    <figure class="memory-figure">
+                      <video class="memory-video" [src]="block.src" controls playsinline></video>
                       @if (block.caption) {
                         <figcaption class="memory-caption">{{ block.caption }}</figcaption>
                       }
@@ -136,6 +144,19 @@
         <button type="submit" class="btn-pastel bucket-add-btn">Añadir ➕</button>
       </form>
       <p class="bucket-progress">Completadas: {{ bucketListItems().filter(i => i.completed).length }} / {{ bucketListItems().length }}</p>
+    </div>
+  </section>
+
+  <!-- Random Gallery Section -->
+  <section class="story-section gallery-section">
+    <div class="story-content">
+      <h2 class="section-title">📸 Más fotos nuestras</h2>
+      <p class="bucket-subtitle">Un poco de todo, sin orden ni fecha</p>
+      <div class="random-gallery">
+        @for (img of randomGalleryImages; track $index) {
+          <img [src]="img" alt="Foto nuestra" class="random-gallery-image">
+        }
+      </div>
     </div>
   </section>
 

@@ -13,6 +13,7 @@ type TimelineBlock =
   | { type: 'text'; content: string }
   | { type: 'heading'; content: string }
   | { type: 'image'; src: string; caption?: string }
+  | { type: 'video'; src: string; caption?: string }
   | { type: 'gallery'; images: string[] }
   | { type: 'rich'; content: string };
 
@@ -65,11 +66,9 @@ export class HomeComponent implements AfterViewInit {
   private floatingIconId = 0;
   private readonly clickIcons = ['✨', '💕', '❤️'];
 
-  dedicationText = `Para ti, que llegaste sin avisar y te quedaste sin pedir permiso.
-Esta página guarda un poco de todo lo que hemos vivido: los nervios del primer día,
-los viajes pequeños, las risas tontas y las palabras que por fin nos atrevimos a decir.
-No es un regalo grande, pero es sincero, como todo lo que siento por ti.
-Gracias por elegirme cada día. Te amo, hoy y siempre. 💕`;
+  dedicationText = `Seis meses! Es increíble que hace nada estaba presentándome por mensaje y ahora llevamos medio año juntos.
+  Imagino que esto no te lo esperabas, es normal, pero quería hacer algo diferente para este momento y ya que (se supone) que se programar se me ocurrió esto.
+  Espero que disfrutes esta pequeña página. Te amo Jess 💕`;
 
   timelineEvents: TimelineEvent[] = [
     {
@@ -110,18 +109,13 @@ Gracias por elegirme cada día. Te amo, hoy y siempre. 💕`;
       ]
     },
     {
-      title: '✨ El día que te dije todo',
-      date: '10/06/2026',
+      title: '🕺💃 Aprendiendo a bailar',
       revealed: false,
       blocks: [
-        { type: 'heading', content: 'Cuando las palabras no alcanzaban' },
-        { type: 'text', content: 'Había un momento que llevaría guardado en mi pecho durante un tiempo. Necesitaba que supieras exactamente lo que significas para mí.' },
+        { type: 'heading', content: 'Intentando mejorar...' },
+        { type: 'text', content: 'Vale, esto no se me da muy bien, pero espero ir mejorando con el tiempo.' },
         { type: 'text', content: 'Te llevé a nuestro lugar especial, bajo las estrellas, y dejé que mi corazón hablara por mí. Te conté cómo cambió todo desde el momento en que te conocí.' },
-        { type: 'gallery', images: [
-          'assets/sushi.jpeg',
-          'assets/san-juan.jpeg',
-          'assets/fiestas-brana-cara.jpeg'
-        ] },
+        { type: 'image', src: 'assets/san-valentin.jpeg' },
         { type: 'text', content: 'Viste las lágrimas en mis ojos porque no son de tristeza, sino de la abrumadora felicidad de tenerte. De saber que compartimos algo verdadero y profundo.' },
         { type: 'text', content: 'Cuando dijiste que sentías lo mismo, el mundo se detuvo. Era el momento más puro, más honesto, más NUESTRO que jamás haya vivido. 💘' }
       ]
@@ -148,6 +142,15 @@ Gracias por elegirme cada día. Te amo, hoy y siempre. 💕`;
     { question: '¿Quién tarda más en arreglarse?', correctAnswer: 'ella', emoji: '💄' },
     { question: '¿Quién cocina mejor?', correctAnswer: 'yo', emoji: '👨‍🍳' },
     { question: '¿Quién es más impuntual?', correctAnswer: 'ella', emoji: '⏰' },
+  ];
+
+  randomGalleryImages: string[] = [
+    'assets/covadonga-beso.jpeg',
+    'assets/covadonga-caras.jpeg',
+    'assets/foto-coche.jpeg',
+    'assets/foto-random-cara.jpeg',
+    'assets/parapente.jpeg',
+    'assets/parapente-caras.jpeg',
   ];
 
   constructor() {

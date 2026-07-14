@@ -152,10 +152,11 @@ export class PeterPanComponent implements AfterViewInit {
   faWandMagicSparkles: IconDefinition = faWandMagicSparkles;
 
   photos = {
-    volando: 'assets/peter-pan-volando.jpg',
-    silueta: 'assets/peter-pan-silueta.jpg',
-    wendy: 'assets/peter-pan-wendy.jpg',
-    neverGrowUp: 'assets/peter-pan-never-grow-up.webp',
+    volando: 'assets/peter-pan-volando.png',
+    silueta: 'assets/peter-pan-silueta.png',
+    wendy: 'assets/peter-pan-wendy.png',
+    neverGrowUp: 'assets/peter-pan-never-grow-up.png',
+    wendy_volando: 'assets/wendy-volando.png',
   };
 
   private trust(html: string): SafeHtml {
